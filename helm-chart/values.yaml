@@ -1,0 +1,53 @@
+namespace: gturdziladze
+studentName: gturdziladze
+
+deployment:
+  name: web-server-gturdziladze
+  image:
+    name: nginx
+    tag: latest
+  containerPort: 80
+  replicaCount: 2
+
+configMap:
+  name: configmap-gturdziladze
+  content: |
+    <html>
+    <head>
+      <title>Hello World</title>
+    </head>
+    <body>
+      <h1>Hello World!</h1>
+    </body>
+    </html>
+
+service:
+  name: service-gturdziladze
+  type: ClusterIP
+  port: 80
+
+serviceAccount:
+  name: gturdziladze
+
+role:
+  name: role-gturdziladze
+  rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "list", "watch"]
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["get", "list", "watch", "create", "delete", "update", "patch"]
+
+roleBinding:
+  name: rolebinding-gturdziladze
+
+virtualService:
+  name: virtualservice-gturdziladze
+  hosts:
+    - "gturdziladze.academy.com"
+  gateways:
+    - istio-system/academy-ingress-gateway
+
+labels:
+  student: gturdziladze
